@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<extension>
+    <name>PLUGIN_PLAYAVI</name>
+    <module>Plugins::PlayAVI::Plugin</module>
+    <version>1.0</version>
+    <description>PLUGIN_PLAYAVI_DESC</description>
+    <creator>nicos</creator>
+    <defaultState>enabled</defaultState>
+    <importmodule>Plugins::PlayAVI::Importer</importmodule>
+    <icon>plugins/PlayAVI/html/images/icon.svg</icon>
+    <type>2</type>
+    <targetApplication>
+        <id>SlimServer</id>
+        <minVersion>7.7</minVersion>
+        <maxVersion>*</maxVersion>
+    </targetApplication>
+</extension>

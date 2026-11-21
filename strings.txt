@@ -1,0 +1,10 @@
+# String file for PlayAVI plugin
+
+PLUGIN_PLAYAVI
+	EN	Play AVI
+
+PLUGIN_PLAYAVI_DESC
+	EN	Play the audio of AVI files, with tags read by ffprobe, the Discogs release id as album id and scanner-safe registration
+
+AVI
+	EN	AVI
