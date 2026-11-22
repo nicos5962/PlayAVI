@@ -121,9 +121,9 @@ my $artistTrackTitleRe = qr/^(?<artist>.+?)\s+-\s+(?<t>\d{1,3})\s*[-.]\s+(?<titl
 # "Artist - Title"
 my $artistTitleRe = qr/^(?<artist>.+?)\s+-\s+(?<title>.+)$/;
 
-# Parent folder of DVD / video rips: "(2003) Album [info] [rip id]".
-# The artist is the folder above it.
-my $ripFolderRe = qr/^\((?<year>\d{4})\)\s+(?<album>.+?)(?:\s*\[(?<info>[^\]]*)\])?(?:\s*\[[^\]]*\])*\s*$/;
+# Parent folder of DVD / video rips: "(2003) Album [info] [rip id]", or with the
+# concert date "(1995-10-15) Place". The artist is the folder above it.
+my $ripFolderRe = qr/^\((?<year>\d{4})(?<date>-\d{2}(?:-\d{2})?)?\)\s+(?<album>.+?)(?:\s*\[(?<info>[^\]]*)\])?(?:\s*\[[^\]]*\])*\s*$/;
 
 # Folder "Artist - Album [info]" or "Artist - 1994 - Album [info]"
 my $artistAlbumFolderRe = qr/^(?<artist>.+?)\s+-\s+(?:(?<year>(?:19|20)\d{2})\s+-\s+)?(?<album>.+?)
@@ -131,6 +131,9 @@ my $artistAlbumFolderRe = qr/^(?<artist>.+?)\s+-\s+(?:(?<year>(?:19|20)\d{2})\s+
 
 # Folder holding one disc of an album: "CD1", "Disc 2", "DVD 1"
 my $discFolderRe = qr/^(?:cd|disc|disk|dvd|dvdr?)\s*[-_.]?\s*(\d{1,2})$/i;
+
+# Names given to audio streams that are no track title: "Stereo", "Surround 5.1", "Dolby Digital 5.1"
+my $genericStreamTitle = qr/^(?:(?:stereo|mono|surround|audio|main|dolby|digital|ac-?3|e-?ac-?3|dts|dts-hd|aac|mp[23]|lpcm|pcm|truehd|ma|hd|\d(?:\.\d)?|ch|channels?|\d+\s*kbps)[\s_.-]*)+$/i;
 
 # Folders that name no album
 my %genericFolder = map { $_ => 1 }
@@ -204,6 +207,7 @@ sub _guessTags {
             $f{ALBUM}   = $c{album};
             $f{YEAR}    = $c{year};
             $f{COMMENT} = $c{info} if defined $c{info} && length $c{info};
+            $f{COMMENT} //= "$c{year}$c{date}" if defined $c{date};
         }
         elsif ($folder =~ $artistAlbumFolderRe) {
             my %c = %+;
@@ -442,6 +446,9 @@ sub getTag {
         for my $key (keys %$source) {
             my $value = $source->{$key};
             next unless defined $value && !ref $value && length $value;
+
+            # the title of an audio stream is often only its name ("Stereo"): not a track title
+            next if uc $key eq 'TITLE' && $source == $stream->{tags} && $value =~ $genericStreamTitle;
 
             $tags->{ uc $key } //= $value;
         }

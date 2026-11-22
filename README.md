@@ -34,8 +34,17 @@ Copy the `PlayAVI` folder into the `Plugins` directory of the server cache (for 
 
 ## Version
 
-1.0
+1.1
 
 ## Author
 
 nicos
+
+## Changelog
+
+### 1.1
+- Rip folders with a concert date, `(1995-10-15) Place`, are recognised like `(2003) Album`: the artist comes from the folder above, the year from the date, and the date goes into the comment.
+- A title that is only the name of an audio stream (`Stereo`, `Surround 5.1`, `Dolby Digital 5.1`, ...) is no longer used as the track title; the title then comes from the file name.
+
+### 1.0
+- First release.

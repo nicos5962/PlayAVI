@@ -3,7 +3,7 @@
 <extension>
     <name>PLUGIN_PLAYAVI</name>
     <module>Plugins::PlayAVI::Plugin</module>
-    <version>1.0</version>
+    <version>1.1</version>
     <description>PLUGIN_PLAYAVI_DESC</description>
     <creator>nicos</creator>
     <defaultState>enabled</defaultState>
